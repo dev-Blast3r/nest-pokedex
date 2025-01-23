@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
@@ -6,6 +7,17 @@ async function bootstrap() {
 //prefijos globales para la url por ejemplo localhost:3000/api/pokemon
   app.setGlobalPrefix('api/v2')
 
-  await app.listen(process.env.PORT ?? 3000);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      }
+    })
+  )
+
+  await app.listen(3000);
 }
 bootstrap();
